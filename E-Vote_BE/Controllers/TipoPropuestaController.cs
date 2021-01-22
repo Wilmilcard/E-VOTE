@@ -1,7 +1,7 @@
 ﻿using E_Vote_BE.Context;
 using E_Vote_BE.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,34 +13,35 @@ namespace E_Vote_BE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TipoDocController : ControllerBase
+    public class TipoPropuestaController : ControllerBase
     {
         private readonly AppDbContext context;
 
-        public TipoDocController(AppDbContext con)
+        public TipoPropuestaController(AppDbContext con)
         {
             this.context = con;
         }
 
         [HttpGet]
-        public IEnumerable<TipoDoc> Get()
+        public IEnumerable<TipoPropuesta> Get()
         {
-            return this.context.TipoDoc.ToList();
-        }
-
-        [HttpGet("{codigo}")]
-        public TipoDoc Get(string codigo)
-        {
-            return this.context.TipoDoc.FirstOrDefault(x => x.Codigo == codigo);
+            return this.context.TipoPropuesta.ToList();
         }
 
 
+        [HttpGet("{id}")]
+        public TipoPropuesta Get(int id)
+        {
+            return this.context.TipoPropuesta.FirstOrDefault(x => x.Id == id);
+        }
+
+        // POST api/<TipoPropuestaController>
         [HttpPost]
-        public ActionResult Post([FromBody] TipoDoc value)
+        public ActionResult Post([FromBody] TipoPropuesta value)
         {
             try
             {
-                context.TipoDoc.Add(value);
+                context.TipoPropuesta.Add(value);
                 context.SaveChanges();
                 return Ok();
             }
@@ -52,7 +53,7 @@ namespace E_Vote_BE.Controllers
 
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] TipoDoc value)
+        public ActionResult Put(int id, [FromBody] TipoPropuesta value)
         {
             if (value.Id == id)
             {
@@ -67,13 +68,13 @@ namespace E_Vote_BE.Controllers
         }
 
 
-        [HttpDelete("{codigo}")]
-        public ActionResult Delete(string codigo)
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int id)
         {
-            var tipo = context.TipoDoc.FirstOrDefault(p => p.Codigo == codigo);
+            var tipo = context.TipoPropuesta.FirstOrDefault(p => p.Id == id);
             if (tipo != null)
             {
-                context.TipoDoc.Remove(tipo);
+                context.TipoPropuesta.Remove(tipo);
                 context.SaveChanges();
                 return Ok();
             }

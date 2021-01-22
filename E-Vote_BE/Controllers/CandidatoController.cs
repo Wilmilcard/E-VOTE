@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using E_Vote_BE.Context;
+using E_Vote_BE.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,36 +15,74 @@ namespace E_Vote_BE.Controllers
     [ApiController]
     public class CandidatoController : ControllerBase
     {
-        // GET: api/<CandidatoController>
+
+        private readonly AppDbContext context;
+
+        public CandidatoController(AppDbContext con)
+        {
+            this.context = con;
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Candidato> Get()
         {
-            return new string[] { "value1", "value2" };
+            return this.context.Candidato.ToList();
         }
 
-        // GET api/<CandidatoController>/5
+
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Candidato Get(int id)
         {
-            return "value";
+            return this.context.Candidato.FirstOrDefault(x => x.Id == id);
         }
 
-        // POST api/<CandidatoController>
+
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult Post([FromBody] Candidato value)
         {
+            try
+            {
+                context.Candidato.Add(value);
+                context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
         }
 
-        // PUT api/<CandidatoController>/5
+
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult Put(int id, [FromBody] Candidato value)
         {
+            if (value.Id == id)
+            {
+                context.Entry(value).State = EntityState.Modified;
+                context.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
-        // DELETE api/<CandidatoController>/5
+
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
+            var cand = context.Candidato.FirstOrDefault(p => p.Id == id);
+            if (cand != null)
+            {
+                context.Candidato.Remove(cand);
+                context.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }
