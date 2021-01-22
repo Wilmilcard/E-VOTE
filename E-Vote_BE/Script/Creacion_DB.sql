@@ -94,7 +94,7 @@ BEGIN
 		sexo VARCHAR(1),
 		Nacimiento DATE,
 		Email VARCHAR(50),
-		Fk_TipoDoc VARCHAR(3),
+		fk_TipoDoc VARCHAR(3),
 		Identificacion VARCHAR(15),
 		Ya_Voto BIT
 	)
@@ -170,7 +170,7 @@ PRINT 'Fk_Eleccion_Postulacion'
 
 ALTER TABLE Sufragante
 ADD CONSTRAINT Fk_Sufragante_TipoDoc
-FOREIGN KEY (Fk_TipoDoc) REFERENCES TipoDoc(Codigo);
+FOREIGN KEY (fk_TipoDoc) REFERENCES TipoDoc(Codigo);
 PRINT 'Fk_Sufragante_TipoDoc'
 GO
 
@@ -228,18 +228,20 @@ INSERT INTO Postulacion(Propuesta,fk_Candidato,fk_TipoPropuesta) VALUES
 ('Mas recursos en el area contable',10004,103)
 PRINT 'Postulacion'
 
-INSERT INTO Sufragante(Nombre,Apellido,sexo,Nacimiento,Email,Fk_TipoDoc,Identificacion,Ya_Voto) VALUES
+INSERT INTO Sufragante(Nombre,Apellido,sexo,Nacimiento,Email,fk_TipoDoc,Identificacion,Ya_Voto) VALUES
 ('Armando','Guzman','M','1993-01-01','armado1993@gmail.com','CC','1110456123',0),
 ('Daniela','Padilla','F','1999-06-12','dan1999@gmail.com','CC','1110432165',0),
 ('Juana','Bravo','F','2001-12-24','juanita18@hotmail.com','CC','1015789987',0),
 ('Valentina','Castro','F','2002-05-12','valen@yahoo.com','CC','1100412321',0),
-('Michael','Rodriguez','M','1993-05-08','michael_R@gmail.com','CE','96521478',0)
+('Michael','Rodriguez','M','1993-05-08','michael_R@gmail.com','CE','96521478',0),
+('Steven','Lopez','M','2000-07-04','stev_lo2354@gmail.com','PS','4654831358',0)
 PRINT 'Sufragante'
 
 INSERT INTO Eleccion(fk_TipoPropuesta,fk_Sufragante) VALUES
 (101,101),
 (101,102),
 (101,103),
+(101,106),
 (102,101),
 (102,102),
 (102,105),
@@ -254,6 +256,7 @@ INSERT INTO Votacion(Propuesta_Id,Votante_Id,Voto,Inicio,Fin) VALUES
 (101,101,10001,'2021-01-21T12:00:00','2021-01-21T12:30:00'),
 (101,102,10004,'2021-01-21T12:04:14','2021-01-21T12:25:30'),
 (101,103,10001,'2021-01-21T13:12:40','2021-01-21T13:40:10'),
+(101,106,10003,'2021-01-21T10:10:10','2021-01-21T10:35:04'),
 (102,101,10002,'2021-01-21T11:01:12','2021-01-21T11:15:12'),
 (102,102,10002,'2021-01-21T15:14:20','2021-01-21T15:36:09'),
 (102,105,10002,'2021-01-21T12:00:55','2021-01-21T12:23:42'),
@@ -265,20 +268,4 @@ INSERT INTO Votacion(Propuesta_Id,Votante_Id,Voto,Inicio,Fin) VALUES
 PRINT 'Votacion'
 GO
 
---select * from V_Lista_Candidatos
-
-SELECT 
-	V.Id as Id_Voto,
-	(S.Nombre + ' ' + S.Apellido) as Votante,
-	S.Fk_TipoDoc as TipoDoc,
-	S.Identificacion,
-	TP.Nombre as Postulacion,
-	(C.Nombre + ' ' + C.Apellido) as Voto_Para,
-	V.Inicio,
-	V.Fin
-FROM 
-	Votacion V
-	INNER JOIN Sufragante S ON V.Votante_Id = S.Id
-	INNER JOIN TipoPropuesta TP ON V.Propuesta_Id = TP.Id
-	INNER JOIN Candidato C ON V.Voto = C.Id
 

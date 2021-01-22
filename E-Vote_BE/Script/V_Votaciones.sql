@@ -1,6 +1,7 @@
-CREATE VIEW V_Votaciones AS
-SELECT 
+CREATE OR ALTER VIEW V_Votaciones AS
+SELECT
 	V.Id as Id_Voto,
+	C.Id,
 	(S.Nombre + ' ' + S.Apellido) as Votante,
 	S.Fk_TipoDoc as TipoDoc,
 	S.Identificacion,

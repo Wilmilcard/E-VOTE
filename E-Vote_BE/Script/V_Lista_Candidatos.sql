@@ -1,4 +1,4 @@
-CREATE VIEW V_Lista_Candidatos AS
+CREATE OR ALTER VIEW V_Lista_Candidatos AS
 SELECT 
 	TP.Nombre as Candidatura,
 	C.Nombre,

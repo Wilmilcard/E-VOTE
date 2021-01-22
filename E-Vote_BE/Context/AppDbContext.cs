@@ -14,6 +14,12 @@ namespace E_Vote_BE.Context
                 
         }
 
+        public DbSet<Candidato> Candidato { get; set; }
+        public DbSet<Eleccion> Eleccion { get; set; }
+        public DbSet<Postulacion> Postulacion { get; set; }
+        public DbSet<Sufragante> Sufragante { get; set; }
         public DbSet<TipoDoc> TipoDoc { get; set; }
+        public DbSet<TipoPropuesta> TipoPropuesta { get; set; }
+        public DbSet<Votacion> Votacion { get; set; }
     }
 }
