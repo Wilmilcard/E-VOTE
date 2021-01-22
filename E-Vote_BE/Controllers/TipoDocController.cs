@@ -1,6 +1,7 @@
 ﻿using E_Vote_BE.Context;
 using E_Vote_BE.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,20 +36,51 @@ namespace E_Vote_BE.Controllers
 
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult Post([FromBody] TipoDoc value)
         {
+            try
+            {
+                context.TipoDoc.Add(value);
+                context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
         }
 
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult Put(int id, [FromBody] TipoDoc value)
         {
+            if (value.Id == id)
+            {
+                context.Entry(value).State = EntityState.Modified;
+                context.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
 
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{codigo}")]
+        public ActionResult Delete(string codigo)
         {
+            var prod = context.TipoDoc.FirstOrDefault(p => p.Codigo == codigo);
+            if (prod != null)
+            {
+                context.TipoDoc.Remove(prod);
+                context.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

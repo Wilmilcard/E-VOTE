@@ -117,10 +117,10 @@ BEGIN
 	(
 		Id INT IDENTITY(101,1) PRIMARY KEY,
 		Votante_Id INT,
-		Postulacion_Id INT,
+		Propuesta_Id INT,
 		Voto INT,
-		Inicio DATE,
-		FIN DATE
+		Inicio DATETIME,
+		Fin DATETIME
 	)
     PRINT 'Tabla Votacion'
 END
@@ -238,7 +238,7 @@ PRINT 'Sufragante'
 
 INSERT INTO Eleccion(fk_TipoPropuesta,fk_Sufragante) VALUES
 (101,101),
-(101,101),
+(101,102),
 (101,103),
 (102,101),
 (102,102),
@@ -250,4 +250,35 @@ INSERT INTO Eleccion(fk_TipoPropuesta,fk_Sufragante) VALUES
 (103,105)
 PRINT 'Eleccion'
 
+INSERT INTO Votacion(Propuesta_Id,Votante_Id,Voto,Inicio,Fin) VALUES
+(101,101,10001,'2021-01-21T12:00:00','2021-01-21T12:30:00'),
+(101,102,10004,'2021-01-21T12:04:14','2021-01-21T12:25:30'),
+(101,103,10001,'2021-01-21T13:12:40','2021-01-21T13:40:10'),
+(102,101,10002,'2021-01-21T11:01:12','2021-01-21T11:15:12'),
+(102,102,10002,'2021-01-21T15:14:20','2021-01-21T15:36:09'),
+(102,105,10002,'2021-01-21T12:00:55','2021-01-21T12:23:42'),
+(103,101,10001,'2021-01-21T16:15:12','2021-01-21T16:32:23'),
+(103,102,10001,'2021-01-21T12:12:30','2021-01-21T12:23:08'),
+(103,103,10004,'2021-01-21T10:13:01','2021-01-21T10:27:06'),
+(103,104,10004,'2021-01-21T09:13:17','2021-01-21T09:50:12'),
+(103,105,10001,'2021-01-21T12:20:34','2021-01-21T12:35:11')
+PRINT 'Votacion'
 GO
+
+--select * from V_Lista_Candidatos
+
+SELECT 
+	V.Id as Id_Voto,
+	(S.Nombre + ' ' + S.Apellido) as Votante,
+	S.Fk_TipoDoc as TipoDoc,
+	S.Identificacion,
+	TP.Nombre as Postulacion,
+	(C.Nombre + ' ' + C.Apellido) as Voto_Para,
+	V.Inicio,
+	V.Fin
+FROM 
+	Votacion V
+	INNER JOIN Sufragante S ON V.Votante_Id = S.Id
+	INNER JOIN TipoPropuesta TP ON V.Propuesta_Id = TP.Id
+	INNER JOIN Candidato C ON V.Voto = C.Id
+
