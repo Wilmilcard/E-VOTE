@@ -75,7 +75,7 @@ namespace E_Vote_BE.Controllers
             var suf = context.Sufragante.FirstOrDefault(p => p.Id == id);
             if (suf != null)
             {
-                context.Postulacion.Remove(suf);
+                context.Sufragante.Remove(suf);
                 context.SaveChanges();
                 return Ok();
             }
